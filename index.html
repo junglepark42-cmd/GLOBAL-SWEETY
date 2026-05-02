@@ -882,6 +882,18 @@ tr:hover td { background: rgba(255,255,255,.02); }
       <label class="form-label">Description</label>
       <input type="text" class="form-control" id="option-description" placeholder="Détails de l'option...">
     </div>
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+        <label class="toggle">
+          <input type="checkbox" id="option-ajoute-jauge">
+          <span class="toggle-slider"></span>
+        </label>
+        <div>
+          <div style="font-size:.88rem;font-weight:500">Compte dans la jauge</div>
+          <div style="font-size:.75rem;color:var(--text3)">La quantité choisie s'ajoute au nb de personnes pour le calcul de jauge</div>
+        </div>
+      </label>
+    </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModalOption()">Annuler</button>
       <button class="btn btn-primary" onclick="saveOption()">Enregistrer</button>
@@ -1547,6 +1559,7 @@ function openOptionModal(formuleId, opt = null) {
     document.getElementById('option-type').value = opt.type;
     document.getElementById('option-duree').value = opt.duree_ajoutee_min || 0;
     document.getElementById('option-description').value = opt.description || '';
+    document.getElementById('option-ajoute-jauge').checked = opt.ajoute_jauge || false;
   } else {
     document.getElementById('modal-option-title').textContent = 'Nouvelle option';
     document.getElementById('option-id').value = '';
@@ -1555,6 +1568,7 @@ function openOptionModal(formuleId, opt = null) {
     document.getElementById('option-type').value = 'checkbox';
     document.getElementById('option-duree').value = '0';
     document.getElementById('option-description').value = '';
+    document.getElementById('option-ajoute-jauge').checked = false;
   }
   document.getElementById('modal-option').style.display = 'flex';
 }
@@ -1570,6 +1584,7 @@ async function saveOption() {
     type: document.getElementById('option-type').value,
     duree_ajoutee_min: duree,
     description: document.getElementById('option-description').value.trim(),
+    ajoute_jauge: document.getElementById('option-ajoute-jauge').checked,
   };
   if (!data.nom) { showToast('Nom obligatoire', 'error'); return; }
   try {
@@ -2371,6 +2386,7 @@ async function onResaFormuleChange() {
           <span style="font-size:.85rem;flex:1">${o.nom}</span>
           ${o.prix > 0 ? `<span style="color:var(--accent);font-size:.8rem">+${o.prix}€/u</span>` : ''}
           ${o.duree_ajoutee_min > 0 ? `<span style="color:var(--accent3);font-size:.8rem">+${o.duree_ajoutee_min}min</span>` : ''}
+          ${o.ajoute_jauge ? `<span style="color:var(--orange);font-size:.75rem">📊 jauge</span>` : ''}
         </label>
         ${o.type === 'quantity' ? `
           <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
@@ -2411,23 +2427,34 @@ function calcPrixTotal() {
     total += prixBase;
     dureeTotal = formule.duree_min;
     detail.push(formule.prix_par_personne
-      ? `${formule.nom} : ${formule.prix}€ × ${nbPersonnes} pers. = ${prixBase}€`
+      ? `${formule.nom} : ${formule.prix}€ × ${nbPersonnes} = ${prixBase}€`
       : `${formule.nom} : ${prixBase}€`);
   }
 
-  // Options avec quantité
+  // Options avec quantité — prix et jauge
+  let extraJauge = 0;
   selectedOptions.forEach(optId => {
     const opt = resaOptions.find(o => o.id === optId);
     const qte = parseInt(document.getElementById(`opt-qte-${optId}`)?.value) || 1;
     if (opt) {
-      const prixOpt = opt.prix * (opt.type === 'quantity' ? qte : 1);
+      const qteEffective = opt.type === 'quantity' ? qte : 1;
+      const prixOpt = opt.prix * qteEffective;
       total += prixOpt;
-      if (opt.duree_ajoutee_min > 0) dureeTotal += opt.duree_ajoutee_min * (opt.type === 'quantity' ? qte : 1);
+      if (opt.duree_ajoutee_min > 0) dureeTotal += opt.duree_ajoutee_min * qteEffective;
+      if (opt.ajoute_jauge) extraJauge += qteEffective;
       if (opt.prix > 0) detail.push(opt.type === 'quantity'
         ? `${opt.nom} ×${qte} : +${prixOpt}€`
         : `${opt.nom} : +${prixOpt}€`);
     }
   });
+
+  // Mettre à jour nb_personnes si des options ajoutent à la jauge
+  const nbBase = parseInt(document.getElementById('resa-nb').value) || 1;
+  if (extraJauge > 0) {
+    const jauge = nbBase + extraJauge;
+    document.getElementById('resa-nb').value = jauge;
+    detail.push(`Jauge totale : ${jauge} pers.`);
+  }
 
   const montantEl = document.getElementById('resa-montant');
   const dureeEl = document.getElementById('resa-duree');
