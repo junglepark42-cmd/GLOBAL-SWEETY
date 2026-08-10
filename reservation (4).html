@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver — Sweety Sweety Roanne</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --v:#9B4DCA;--rose:#FF3DAA;--vert:#00E676;--bleu:#00C8F8;--jaune:#FFE000;
+  --fond:#FAFAFF;--blanc:#fff;--sombre:#1A0035;--gris:#7B6B8D;--bg2:#F3EEFF;
+  --r:18px;--rs:12px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--fond);color:var(--sombre);min-height:100vh}
+
+/* HEADER */
+header{padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--blanc);border-bottom:2px solid var(--bg2);position:sticky;top:0;z-index:50;box-shadow:0 2px 20px rgba(155,77,202,.08)}
+.logo{font-family:'Baloo 2',sans-serif;font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,var(--rose),var(--v));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.back-btn{color:var(--gris);font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:5px;font-weight:700}
+.back-btn:hover{color:var(--sombre)}
+
+/* PROGRESS */
+.progress{background:var(--blanc);border-bottom:2px solid var(--bg2);padding:16px 24px}
+.steps{display:flex;align-items:center;max-width:640px;margin:0 auto}
+.step-dot{width:36px;height:36px;border-radius:50%;border:3px solid #E0D4F0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#C0A8D8;flex-shrink:0;transition:.3s;background:var(--blanc)}
+.step-dot.active{border-color:var(--rose);background:var(--rose);color:white;box-shadow:0 4px 14px rgba(255,61,170,.3)}
+.step-dot.done{border-color:var(--vert);background:var(--vert);color:white}
+.step-txt{font-size:.7rem;font-weight:800;color:#C0A8D8;white-space:nowrap;display:none}
+.step-txt.active{color:var(--sombre);display:block}
+.step-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.step-line{flex:1;height:3px;background:#E0D4F0;margin:0 8px;border-radius:100px;transition:.3s}
+.step-line.done{background:var(--vert)}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:28px 20px 100px}
+
+/* SCREENS */
+.screen{display:none;animation:fadeIn .3s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* TITRES */
+.stitle{font-family:'Baloo 2',sans-serif;font-size:1.7rem;font-weight:900;margin-bottom:6px;color:var(--sombre)}
+.ssub{color:var(--gris);font-size:.9rem;margin-bottom:24px;line-height:1.5}
+
+/* CARDS FORMULES — LAYOUT PRINCIPAL */
+.formule-hero{display:grid;gap:14px;margin-bottom:24px}
+.f-card{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:20px 22px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;overflow:hidden}
+.f-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(to bottom,var(--rose),var(--v));opacity:0;transition:.2s}
+.f-card:hover{border-color:rgba(155,77,202,.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(155,77,202,.1)}
+.f-card:hover::before{opacity:1}
+.f-card.selected{border-color:var(--rose);background:linear-gradient(135deg,rgba(255,61,170,.04),rgba(155,77,202,.04))}
+.f-card.selected::before{opacity:1}
+.f-card.featured{border-color:var(--rose);background:linear-gradient(135deg,rgba(255,61,170,.06),rgba(155,77,202,.06))}
+.f-card.featured::before{opacity:1;background:linear-gradient(to bottom,var(--jaune),var(--rose))}
+.f-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--jaune),var(--rose));color:white;font-size:.68rem;font-weight:900;padding:3px 10px;border-radius:100px}
+.f-icon{font-size:1.8rem;flex-shrink:0}
+.f-info{flex:1;min-width:0}
+.f-name{font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:900;color:var(--sombre);margin-bottom:3px}
+.f-detail{font-size:.78rem;color:var(--gris);line-height:1.5}
+.f-right{text-align:right;flex-shrink:0}
+.f-prix{font-family:'Baloo 2',sans-serif;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--rose),var(--v));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.f-prix-sub{font-size:.7rem;color:var(--gris);margin-top:2px}
+.f-check{width:26px;height:26px;border-radius:50%;border:2px solid #E0D4F0;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:.2s;margin-left:10px}
+.f-card.selected .f-check{background:var(--rose);border-color:var(--rose);color:white}
+
+/* NB PERSONNES */
+.nb-card{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.nb-title{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px;color:var(--sombre)}
+.nb-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F0E8F8}
+.nb-row:last-child{border-bottom:none;padding-bottom:0}
+.nb-label{font-size:.88rem;color:var(--gris);font-weight:700}
+.nb-ctrl{display:flex;align-items:center;gap:10px}
+.nb-btn{width:36px;height:36px;border-radius:50%;border:2px solid #E0D4F0;background:var(--blanc);color:var(--sombre);cursor:pointer;font-size:1.1rem;font-weight:900;display:flex;align-items:center;justify-content:center;transition:.2s}
+.nb-btn:hover{border-color:var(--rose);color:var(--rose)}
+.nb-val{font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;min-width:30px;text-align:center;color:var(--sombre)}
+
+/* OPTIONS */
+.opts-section{margin-bottom:16px}
+.opts-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);margin-bottom:10px}
+.opt-card{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--rs);padding:14px 16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.opt-card:hover{border-color:rgba(0,230,118,.4)}
+.opt-card.selected{border-color:var(--vert);background:rgba(0,230,118,.04)}
+.opt-ico{font-size:1.4rem;flex-shrink:0}
+.opt-info{flex:1}
+.opt-name{font-weight:800;font-size:.9rem;color:var(--sombre);margin-bottom:2px}
+.opt-desc{font-size:.74rem;color:var(--gris)}
+.opt-prix{font-weight:900;color:var(--vert);font-size:.9rem;white-space:nowrap}
+.opt-chk{width:24px;height:24px;border-radius:6px;border:2px solid #E0D4F0;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;font-size:.8rem}
+.opt-card.selected .opt-chk{background:var(--vert);border-color:var(--vert);color:white}
+
+/* TOTAL STICKY */
+.total-sticky{position:fixed;bottom:0;left:0;right:0;background:var(--blanc);border-top:2px solid #E8DCF4;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;z-index:40;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.total-left{display:flex;flex-direction:column}
+.total-label{font-size:.72rem;color:var(--gris);font-weight:700;text-transform:uppercase}
+.total-val{font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,var(--rose),var(--v));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.btn-next{padding:14px 28px;background:linear-gradient(135deg,var(--rose),var(--v));color:white;border:none;border-radius:100px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:.25s;box-shadow:0 4px 20px rgba(255,61,170,.3)}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,61,170,.4)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-back-link{display:inline-flex;align-items:center;gap:6px;color:var(--gris);font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:20px;text-decoration:none}
+.btn-back-link:hover{color:var(--sombre)}
+
+/* CALENDRIER */
+.cal-wrap{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:20px;margin-bottom:16px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-month{font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;color:var(--sombre)}
+.cal-arr{background:var(--bg2);border:none;border-radius:var(--rs);color:var(--sombre);width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;transition:.2s}
+.cal-arr:hover{background:#E0D4F0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-head{text-align:center;font-size:.68rem;color:var(--gris);font-weight:800;padding:6px 0;text-transform:uppercase}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:.88rem;font-weight:800;cursor:pointer;transition:.15s;border:2px solid transparent;color:var(--sombre)}
+.cal-day.empty{pointer-events:none}
+.cal-day.past,.cal-day.closed{color:#D0C0E0;cursor:not-allowed;font-weight:600}
+.cal-day.available{background:rgba(0,230,118,.08);border-color:rgba(0,230,118,.25);color:#00A854}
+.cal-day.available:hover{background:rgba(0,230,118,.2);border-color:var(--vert);transform:scale(1.05)}
+.cal-day.selected{background:linear-gradient(135deg,var(--rose),var(--v));border-color:transparent;color:white;box-shadow:0 4px 12px rgba(255,61,170,.3)}
+.cal-day.today{font-weight:900}
+.cal-legend{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid #F0E8F8}
+.cal-leg-item{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--gris)}
+.cal-leg-dot{width:10px;height:10px;border-radius:3px}
+
+/* CRÉNEAUX */
+.creneaux-wrap{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:20px;margin-bottom:16px}
+.creneaux-title{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:14px;color:var(--sombre)}
+.creneaux-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px}
+.cr-btn{background:var(--bg2);border:2px solid transparent;border-radius:var(--rs);padding:12px 8px;cursor:pointer;transition:.15s;text-align:center}
+.cr-btn:hover:not(.plein){border-color:rgba(155,77,202,.3);background:#EAD9FF}
+.cr-btn.selected{background:linear-gradient(135deg,var(--rose),var(--v));border-color:transparent;color:white;box-shadow:0 4px 12px rgba(255,61,170,.25)}
+.cr-btn.plein{opacity:.4;cursor:not-allowed}
+.cr-time{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900}
+.cr-dispo{font-size:.68rem;font-weight:700;margin-top:3px;color:var(--gris)}
+.cr-btn.selected .cr-dispo{color:rgba(255,255,255,.8)}
+.cr-dispo.ok{color:#00A854}
+.cr-dispo.warn{color:#FF8800}
+.cr-dispo.full{color:var(--rose)}
+
+/* FORMS */
+.form-section{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:22px;margin-bottom:16px}
+.form-stitle{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px;color:var(--sombre)}
+.fg{margin-bottom:14px}
+.flabel{display:block;font-size:.75rem;font-weight:800;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.finput{width:100%;background:var(--bg2);border:2px solid transparent;border-radius:var(--rs);color:var(--sombre);font-family:'Nunito',sans-serif;font-size:.9rem;padding:11px 15px;transition:.2s;font-weight:600}
+.finput:focus{outline:none;border-color:var(--v);background:var(--blanc)}
+textarea.finput{resize:vertical;min-height:80px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* RECAP */
+.recap-wrap{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:22px;margin-bottom:16px}
+.recap-stitle{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);margin-bottom:14px}
+.recap-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #F5F0FA;font-size:.88rem;gap:12px}
+.recap-row:last-child{border-bottom:none;font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;padding-top:12px;margin-top:4px;border-top:2px solid #E8DCF4}
+.rl{color:var(--gris);font-weight:600}
+.rv{font-weight:700;text-align:right}
+.recap-row:last-child .rv{background:linear-gradient(135deg,var(--rose),var(--v));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* CONFIRM */
+.confirm-page{text-align:center;padding:30px 0}
+.confirm-anim{font-size:4rem;margin-bottom:16px;display:block;animation:bounce .6s ease}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.confirm-title{font-family:'Baloo 2',sans-serif;font-size:2rem;font-weight:900;color:var(--sombre);margin-bottom:10px}
+.confirm-sub{color:var(--gris);margin-bottom:24px;line-height:1.6}
+.confirm-ref{background:linear-gradient(135deg,rgba(255,61,170,.1),rgba(155,77,202,.1));border:2px solid rgba(155,77,202,.2);border-radius:var(--r);padding:16px 24px;display:inline-block;font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;margin-bottom:24px;color:var(--v)}
+.confirm-infos{background:var(--blanc);border:2px solid #E8DCF4;border-radius:var(--r);padding:20px;margin-bottom:24px;text-align:left}
+.btn-home{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,var(--rose),var(--v));color:white;border-radius:100px;font-weight:800;text-decoration:none;font-family:'Nunito',sans-serif;box-shadow:0 4px 20px rgba(255,61,170,.3)}
+
+/* ALERT */
+.alert-box{background:rgba(255,232,0,.15);border:2px solid rgba(255,200,0,.4);border-radius:var(--rs);padding:12px 16px;margin-bottom:16px;font-size:.84rem;color:#7A6000;font-weight:700;display:flex;align-items:center;gap:8px}
+
+/* LOADER */
+.loader-wrap{padding:40px;text-align:center;color:var(--gris)}
+.loader{display:inline-block;width:32px;height:32px;border:3px solid #E0D4F0;border-top-color:var(--v);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--sombre);color:white;border-radius:100px;padding:12px 24px;font-size:.85rem;z-index:999;display:none;box-shadow:0 8px 32px rgba(0,0,0,.2);white-space:nowrap;font-weight:700}
+#toast.show{display:flex;align-items:center;gap:8px}
+#toast.ok{background:#00A854}
+#toast.err{background:#E0003C}
+
+@media(max-width:500px){
+  .frow{grid-template-columns:1fr}
+  .creneaux-grid{grid-template-columns:repeat(3,1fr)}
+  .steps .step-line{margin:0 4px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">🌴 Sweety Sweety</a>
+  <a href="index.html" class="back-btn">← Retour</a>
+</header>
+
+<div class="progress">
+  <div class="steps">
+    <div class="step-wrap"><div class="step-dot active" id="sc1">1</div><div class="step-txt active" id="sl1">Participants</div></div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-wrap"><div class="step-dot" id="sc2">2</div><div class="step-txt" id="sl2">Date & Créneau</div></div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-wrap"><div class="step-dot" id="sc3">3</div><div class="step-txt" id="sl3">Formule</div></div>
+    <div class="step-line" id="line3"></div>
+    <div class="step-wrap"><div class="step-dot" id="sc4">4</div><div class="step-txt" id="sl4">Vos infos</div></div>
+    <div class="step-line" id="line4"></div>
+    <div class="step-wrap"><div class="step-dot" id="sc5">5</div><div class="step-txt" id="sl5">Confirmation</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- S1 : PARTICIPANTS -->
+<div class="screen active" id="s1">
+  <div class="stitle">Combien serez-vous ?</div>
+  <div class="ssub">Commencez par indiquer le nombre de participants</div>
+  <div class="nb-card">
+    <div class="nb-title">👥 Nombre de participants</div>
+    <div class="nb-row">
+      <span class="nb-label">👶 Enfants 0–3 ans</span>
+      <div class="nb-ctrl">
+        <button class="nb-btn" onclick="chNb('nb03',-1)">−</button>
+        <span class="nb-val" id="nb03v">0</span>
+        <button class="nb-btn" onclick="chNb('nb03',1)">+</button>
+      </div>
+    </div>
+    <div class="nb-row">
+      <span class="nb-label">🧒 Enfants 4–12 ans</span>
+      <div class="nb-ctrl">
+        <button class="nb-btn" onclick="chNb('nb412',-1)">−</button>
+        <span class="nb-val" id="nb412v">0</span>
+        <button class="nb-btn" onclick="chNb('nb412',1)">+</button>
+      </div>
+    </div>
+    <div class="nb-row">
+      <span class="nb-label">👨 Adultes accompagnateurs</span>
+      <div class="nb-ctrl">
+        <button class="nb-btn" onclick="chNb('nbA',-1)">−</button>
+        <span class="nb-val" id="nbAv">0</span>
+        <button class="nb-btn" onclick="chNb('nbA',1)">+</button>
+      </div>
+    </div>
+  </div>
+  <div style="background:rgba(155,77,202,.06);border:2px solid rgba(155,77,202,.15);border-radius:var(--rs);padding:14px 16px;font-size:.84rem;color:var(--gris)">
+    ℹ️ Les entrées adultes sont gratuites. Les tarifs s'afficheront selon le nombre d'enfants.
+  </div>
+</div>
+
+<!-- S2 : DATE + CRÉNEAU -->
+<div class="screen" id="s2">
+  <a class="btn-back-link" onclick="goStep(1)">← Modifier les participants</a>
+  <div class="stitle">Choisissez une date</div>
+  <div class="ssub" id="s2-sub">Sélectionnez un jour disponible</div>
+  <div class="cal-wrap">
+    <div class="cal-nav">
+      <button class="cal-arr" onclick="navMois(-1)">‹</button>
+      <div class="cal-month" id="cal-month"></div>
+      <button class="cal-arr" onclick="navMois(1)">›</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <div class="cal-leg-item"><div class="cal-leg-dot" style="background:rgba(0,230,118,.4)"></div>Disponible</div>
+      <div class="cal-leg-item"><div class="cal-leg-dot" style="background:#E0D4F0"></div>Fermé</div>
+    </div>
+  </div>
+  <div class="creneaux-wrap" id="creneaux-wrap" style="display:none">
+    <div class="creneaux-title">Choisissez un créneau</div>
+    <div class="creneaux-grid" id="creneaux-grid"></div>
+  </div>
+</div>
+
+<!-- S3 : FORMULE + OPTIONS -->
+<div class="screen" id="s3">
+  <a class="btn-back-link" onclick="goStep(2)">← Modifier la date</a>
+  <div class="stitle">Choisissez votre formule</div>
+  <div class="ssub" id="s3-sub">Toutes les formules incluent l'accès libre aux structures</div>
+  <div id="formule-list-s3"><div class="loader-wrap"><div class="loader"></div></div></div>
+  <div id="opts-wrap"></div>
+  <div class="recap-wrap" id="recap-s3" style="display:none">
+    <div class="recap-stitle">Récapitulatif</div>
+    <div id="recap-s3-content"></div>
+  </div>
+</div>
+
+<!-- S4 : INFOS CLIENT -->
+<div class="screen" id="s4">
+  <a class="btn-back-link" onclick="goStep(3)">← Modifier la formule</a>
+  <div class="stitle">Vos coordonnées</div>
+  <div class="ssub">Pour confirmer et vous envoyer un récapitulatif</div>
+  <div class="form-section">
+    <div class="form-stitle">👤 Informations de contact</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Prénom *</label><input type="text" class="finput" id="f-prenom" placeholder="Votre prénom"></div>
+      <div class="fg"><label class="flabel">Nom *</label><input type="text" class="finput" id="f-nom" placeholder="Votre nom"></div>
+    </div>
+    <div class="fg"><label class="flabel">Email *</label><input type="email" class="finput" id="f-email" placeholder="votre@email.fr"></div>
+    <div class="fg"><label class="flabel">Téléphone *</label><input type="tel" class="finput" id="f-tel" placeholder="06 00 00 00 00"></div>
+  </div>
+  <div class="form-section" id="anniv-section" style="display:none">
+    <div class="form-stitle">🎂 Enfant fêté</div>
+    <div class="frow">
+      <div class="fg"><label class="flabel">Prénom *</label><input type="text" class="finput" id="f-cpn" placeholder="Prénom de l'enfant"></div>
+      <div class="fg"><label class="flabel">Âge *</label><input type="number" class="finput" id="f-cage" min="1" max="12" placeholder="Ex: 7"></div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="fg"><label class="flabel">Message / demande spéciale</label><textarea class="finput" id="f-notes" placeholder="Allergies, demandes particulières..."></textarea></div>
+  </div>
+  <div class="alert-box">💳 Paiement sur place à votre arrivée — CB, Espèces, SumUp, ANCV acceptés</div>
+</div>
+
+<!-- S5 : RECAP + CONFIRMATION -->
+<div class="screen" id="s5">
+  <a class="btn-back-link" onclick="goStep(4)">← Modifier mes infos</a>
+  <div class="stitle">Vérifiez votre réservation</div>
+  <div class="ssub">Un email de confirmation vous sera envoyé</div>
+  <div class="recap-wrap" id="recap-final"></div>
+  <div class="alert-box">💳 Règlement sur place. Aucun paiement n'est requis maintenant.</div>
+</div>
+
+<!-- S6 : SUCCÈS -->
+<div class="screen" id="s6">
+  <div class="confirm-page">
+    <span class="confirm-anim">🎉</span>
+    <div class="confirm-title">C'est confirmé !</div>
+    <div class="confirm-sub">Votre réservation est enregistrée.<br>On vous attend avec impatience !</div>
+    <div class="confirm-ref" id="confirm-ref">Référence SW-XXXXXX</div>
+    <div class="confirm-infos" id="confirm-infos"></div>
+    <a href="index.html" class="btn-home">Retour au site 🌴</a>
+  </div>
+</div>
+
+</div>
+
+<!-- TOTAL STICKY -->
+<div class="total-sticky" id="total-sticky" style="display:none">
+  <div class="total-left">
+    <div class="total-label">Total estimé</div>
+    <div class="total-val" id="total-val">0,00 €</div>
+  </div>
+  <button class="btn-next" id="btn-next" onclick="nextStep()">Continuer →</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SB='https://kqasgptqvwpykjqqqnlg.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxYXNncHRxdndweWtqcXFxbmxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MDk0MTMsImV4cCI6MjA5MzI4NTQxM30.OYkx112Rvkgdr3H45mKjotsNXOuQGpHGCN0aCF9o0YM';
+async function sb(t,m='GET',b=null,f=''){
+  const r=await fetch(SB+'/rest/v1/'+t+f,{method:m,headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=representation'},body:b?JSON.stringify(b):undefined});
+  if(!r.ok)throw new Error(await r.text());
+  const x=await r.text();return x?JSON.parse(x):[];
+}
+function fmt(n){return Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
+function ds(d){return d.toISOString().split('T')[0];}
+
+// ── ÉTAT ──
+let S={step:1,activite:null,formule:null,opts:[],date:null,creneau:null,nb03:0,nb412:0,nbA:0,prenom:'',nom:'',email:'',tel:'',notes:'',cpn:'',cage:null};
+let ALL={activites:[],formules:[],options:[]};
+let calDate=new Date();
+
+// ── INIT ──
+async function init(){
+  ALL.activites=await sb('activites','GET',null,'?actif=eq.true&order=ordre.asc');
+  // Charger toutes les formules de toutes les activités
+  for(const a of ALL.activites){
+    const fs=await sb('formules','GET',null,'?activite_id=eq.'+a.id+'&actif=eq.true&order=ordre.asc');
+    ALL.formules.push(...fs.map(f=>({...f,_activite:a})));
+    for(const f of fs){
+      const os=await sb('options','GET',null,'?formule_id=eq.'+f.id+'&actif=eq.true');
+      ALL.options.push(...os);
+    }
+  }
+  renderFormules();
+}
+
+// ── FORMULES ──
+const ACT_ICONS={'entree':'🏃','anniversaire':'🎂','groupe':'🏫','vr':'🥽','splash':'🎨'};
+const FEATURED_SLUGS=['entree']; // activités à mettre en avant
+
+function renderFormules3(){
+  const list=document.getElementById('formule-list-s3');
+  const nb=S.nb03+S.nb412;
+  let html='';
+  // Grouper par activité
+  ALL.activites.forEach(a=>{
+    const fs=ALL.formules.filter(f=>f.activite_id===a.id);
+    if(!fs.length)return;
+    html+=`<div style="margin-bottom:20px">
+      <div style="font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span>${ACT_ICONS[a.slug]||'🎪'}</span> ${a.nom}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${fs.map(f=>{
+          const featured=a.slug==='entree'&&f.duree_min>=180;
+          const prixCalc=f.prix_par_personne?f.prix*nb:f.prix;
+          const sel=S.formule?.id===f.id;
+          return`<div class="f-card${featured?' featured':''}${sel?' selected':''}" onclick="selectFormule('${f.id}')">
+            ${featured?'<div class="f-badge">⭐ Populaire</div>':''}
+            <div class="f-icon">${featured?'⭐':ACT_ICONS[a.slug]||'🎪'}</div>
+            <div class="f-info">
+              <div class="f-name">${f.nom}</div>
+              <div class="f-detail">${f.duree_min}min${f.description?' · '+f.description:''}${f.prix_par_personne?' · Prix par enfant':''}</div>
+            </div>
+            <div class="f-right">
+              <div class="f-prix">${fmt(prixCalc)}</div>
+              <div class="f-prix-sub">${f.prix_par_personne?'pour '+nb+' enfant'+(nb>1?'s':''):'forfait'}</div>
+            </div>
+            <div class="f-check" id="fchk-${f.id}">${sel?'✓':''}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  list.innerHTML=html;
+  // Afficher les options si formule déjà sélectionnée
+  if(S.formule){renderOpts3();document.getElementById('recap-s3').style.display='block';renderRecapS3();}
+}
+
+function renderFormules(){
+  const list=document.getElementById('formule-list-s1');
+  // Grouper par activité
+  let html='';
+  ALL.activites.forEach(a=>{
+    const fs=ALL.formules.filter(f=>f.activite_id===a.id);
+    if(!fs.length)return;
+    html+=`<div style="margin-bottom:20px">
+      <div style="font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);margin-bottom:10px;display:flex;align-items:center;gap:7px">
+        <span>${ACT_ICONS[a.slug]||'🎪'}</span> ${a.nom}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${fs.map((f,i)=>{
+          const featured=a.slug==='entree'&&f.duree_min>=180;
+          const prixBase=f.prix_par_personne?f.prix+'€/pers.':fmt(f.prix);
+          return`<div class="f-card${featured?' featured':''}" onclick="selectFormule('${f.id}')">
+            ${featured?'<div class="f-badge">⭐ Populaire</div>':''}
+            <div class="f-icon">${featured?'⭐':ACT_ICONS[a.slug]||'🎪'}</div>
+            <div class="f-info">
+              <div class="f-name">${f.nom}</div>
+              <div class="f-detail">${f.duree_min}min${f.description?' · '+f.description:''}</div>
+            </div>
+            <div class="f-right">
+              <div class="f-prix">${f.prix_par_personne?f.prix+'€':fmt(f.prix)}</div>
+              <div class="f-prix-sub">${f.prix_par_personne?'par enfant':'forfait'}</div>
+            </div>
+            <div class="f-check" id="fchk-${f.id}"></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  list.innerHTML=html;
+}
+
+function selectFormule(id){
+  S.formule=ALL.formules.find(f=>f.id===id);
+  S.activite=S.formule._activite;
+  S.opts=[];
+  document.querySelectorAll('.f-card').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('[id^="fchk-"]').forEach(c=>{c.textContent='';});
+  event.currentTarget.classList.add('selected');
+  const chk=document.getElementById('fchk-'+id);
+  if(chk)chk.textContent='✓';
+  // Afficher options
+  renderOpts3();
+  document.getElementById('recap-s3').style.display='block';
+  renderRecapS3();
+  updTotal();updBtnNext();
+}
+
+// ── CALENDRIER ──
+const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const VACANCES=[['2025-10-18','2025-11-03'],['2025-12-20','2026-01-05'],['2026-02-07','2026-02-23'],['2026-04-04','2026-04-20'],['2026-07-04','2026-09-01'],['2026-10-17','2026-11-02']];
+
+function isVac(date){const d=ds(date);return VACANCES.some(([a,b])=>d>=a&&d<=b);}
+function isOuv(date){const day=date.getDay();return isVac(date)?day!==1:[3,6,0].includes(day);}
+function navMois(dir){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+dir,1);renderCal();}
+
+async function renderCal(){
+  const y=calDate.getFullYear(),m=calDate.getMonth();
+  document.getElementById('cal-month').textContent=MOIS[m]+' '+y;
+  const premier=new Date(y,m,1),dernier=new Date(y,m+1,0).getDate();
+  const debut=(premier.getDay()+6)%7;
+  const today=new Date();today.setHours(0,0,0,0);
+  let html='<div class="cal-head">Lun</div><div class="cal-head">Mar</div><div class="cal-head">Mer</div><div class="cal-head">Jeu</div><div class="cal-head">Ven</div><div class="cal-head">Sam</div><div class="cal-head">Dim</div>';
+  for(let i=0;i<debut;i++)html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=dernier;d++){
+    const date=new Date(y,m,d);
+    const dstr=ds(date);
+    const past=date<today;
+    const ouv=isOuv(date);
+    const sel=S.date===dstr;
+    let cls='cal-day';
+    if(past||!ouv)cls+=' past';
+    else cls+=' available';
+    if(sel)cls+=' selected';
+    const onclick=(past||!ouv)?'':`onclick="selDate('${dstr}')"`;
+    html+=`<div class="${cls}" ${onclick}>${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+  document.getElementById('s2-sub').textContent='Choisissez votre date de visite';
+}
+
+async function selDate(dstr){
+  S.date=dstr;S.creneau=null;
+  await renderCal();
+  await renderCreneaux(dstr);
+  document.getElementById('creneaux-wrap').style.display='block';
+  updBtnNext();
+}
+
+async function renderCreneaux(dstr){
+  const date=new Date(dstr);
+  const jour=(date.getDay()+6)%7;
+  // Utiliser la première activité (Entrée simple) pour les créneaux par défaut
+  const actId=(S.activite||ALL.activites[0])?.id;
+  if(!actId)return;
+  const creneaux=await sb('creneaux_config','GET',null,'?activite_id=eq.'+actId+'&actif=eq.true').catch(()=>[]);
+  const filtres=creneaux.filter(c=>c.jour_semaine===null||c.jour_semaine===jour).sort((a,b)=>a.heure_debut.localeCompare(b.heure_debut));
+  const resas=await sb('reservations','GET',null,'?activite_id=eq.'+actId+'&date=eq.'+dstr+'&statut=not.in.(annulee,no_show)').catch(()=>[]);
+  const grid=document.getElementById('creneaux-grid');
+  if(!filtres.length){grid.innerHTML='<div style="color:var(--gris);font-size:.85rem">Aucun créneau ce jour.</div>';return;}
+  grid.innerHTML=filtres.map(c=>{
+    const h=c.heure_debut.slice(0,5);
+    const hm=parseInt(h.split(':')[0])*60+parseInt(h.split(':')[1]);
+    const nb=resas.filter(r=>{const rm=parseInt(r.heure_arrivee?.split(':')[0]||0)*60+(parseInt(r.heure_arrivee?.split(':')[1])||0);return rm===hm;}).reduce((s,r)=>s+(r.nb_personnes||0),0);
+    const jauge_max=(S.activite||ALL.activites[0])?.jauge_max||50;
+    const dispo=jauge_max-nb;
+    const plein=dispo<=0;
+    const warn=dispo<=5&&dispo>0;
+    const sel=S.creneau===h;
+    const dispoCls=plein?'full':warn?'warn':'ok';
+    const dispoTxt=plein?'Complet':dispo+' places';
+    const cls='cr-btn'+(plein?' plein':'')+(sel?' selected':'');
+    return '<div class="'+cls+'"'+(plein?'':' onclick="selCreneau(\''+h+'\',this)"')+'><div class="cr-time">'+h+'</div><div class="cr-dispo '+dispoCls+'">'+dispoTxt+'</div></div>';
+  }).join('');
+}
+
+function selCreneau(h,el){
+  S.creneau=h;
+  document.querySelectorAll('.cr-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  updBtnNext();
+}
+
+// ── PARTICIPANTS + OPTIONS ──
+function chNb(key,dir){
+  S[key]=Math.max(0,Math.min(50,S[key]+dir));
+  document.getElementById(key+'v').textContent=S[key];
+  updTotal();renderRecapS3();
+}
+
+function renderOpts3(){renderOpts();}
+function renderOpts(){
+  const fOpts=ALL.options.filter(o=>o.formule_id===S.formule?.id);
+  const wrap=document.getElementById('opts-wrap');
+  if(!fOpts.length){wrap.innerHTML='';return;}
+  const OICONS={'Goûter':'🍩','Repas':'🍕','VR':'🥽','Splash':'🎨','gouter':'🍩','repas':'🍕','vr':'🥽','splash':'🎨'};
+  wrap.innerHTML='<div class="opts-title">Options disponibles</div>'+fOpts.map(o=>{
+    const sel=S.opts.includes(o.id);
+    const ico=Object.entries(OICONS).find(([k])=>o.nom.toLowerCase().includes(k))?.[1]||'✨';
+    return`<div class="opt-card${sel?' selected':''}" onclick="togOpt('${o.id}',this)">
+      <span class="opt-ico">${ico}</span>
+      <div class="opt-info">
+        <div class="opt-name">${o.nom}</div>
+        <div class="opt-desc">${o.duree_ajoutee_min>0?'+'+o.duree_ajoutee_min+' min · ':''} ${o.type==='per_person'?'Par enfant':o.type==='quantity'?'Quantité variable':''}</div>
+      </div>
+      <div class="opt-prix">+${fmt(o.prix)}</div>
+      <div class="opt-chk" id="ochk-${o.id}">${sel?'✓':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function togOpt(id,el){
+  if(S.opts.includes(id))S.opts=S.opts.filter(x=>x!==id);
+  else S.opts.push(id);
+  el.classList.toggle('selected');
+  const chk=document.getElementById('ochk-'+id);
+  if(chk)chk.textContent=S.opts.includes(id)?'✓':'';
+  updTotal();renderRecapS3();
+}
+
+function calcTotal(){
+  if(!S.formule)return 0;
+  const nb=S.nb03+S.nb412;
+  let t=S.formule.prix_par_personne?S.formule.prix*nb:S.formule.prix;
+  ALL.options.filter(o=>S.opts.includes(o.id)).forEach(o=>{t+=o.prix*(o.type==='per_person'?nb:1);});
+  return t;
+}
+
+function updTotal(){
+  document.getElementById('total-val').textContent=fmt(calcTotal());
+}
+
+function renderRecapS3(){
+  const fOpts=ALL.options.filter(o=>S.opts.includes(o.id));
+  const nb=S.nb03+S.nb412;
+  let html=`<div class="recap-row"><span class="rl">Formule</span><span class="rv">${S.formule?.nom}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Enfants 0-3 ans</span><span class="rv">${S.nb03}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Enfants 4-12 ans</span><span class="rv">${S.nb412}</span></div>`;
+  if(S.nbA>0)html+=`<div class="recap-row"><span class="rl">Adultes</span><span class="rv">${S.nbA}</span></div>`;
+  fOpts.forEach(o=>{html+=`<div class="recap-row"><span class="rl">+ ${o.nom}</span><span class="rv">+${fmt(o.prix*(o.type==='per_person'?nb:1))}</span></div>`;});
+  html+=`<div class="recap-row"><span class="rl">Total à régler</span><span class="rv">${fmt(calcTotal())}</span></div>`;
+  document.getElementById('recap-s3-content').innerHTML=html;
+}
+
+// ── RÉCAP FINAL ──
+function renderRecapFinal(){
+  const fOpts=ALL.options.filter(o=>S.opts.includes(o.id));
+  const ddate=new Date(S.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  let html=`<div class="recap-stitle">Votre réservation</div>`;
+  html+=`<div class="recap-row"><span class="rl">Activité</span><span class="rv">${S.activite?.nom}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Formule</span><span class="rv">${S.formule?.nom} — ${S.formule?.duree_min}min</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Date</span><span class="rv">${ddate}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Créneau</span><span class="rv">${S.creneau}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Enfants 0-3</span><span class="rv">${S.nb03}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Enfants 4-12</span><span class="rv">${S.nb412}</span></div>`;
+  if(S.nbA>0)html+=`<div class="recap-row"><span class="rl">Adultes</span><span class="rv">${S.nbA}</span></div>`;
+  fOpts.forEach(o=>{html+=`<div class="recap-row"><span class="rl">+ ${o.nom}</span><span class="rv">+${fmt(o.prix)}</span></div>`;});
+  html+=`<div class="recap-row"><span class="rl">Contact</span><span class="rv">${S.prenom} ${S.nom}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Email</span><span class="rv">${S.email}</span></div>`;
+  html+=`<div class="recap-row"><span class="rl">Total sur place</span><span class="rv">${fmt(calcTotal())}</span></div>`;
+  document.getElementById('recap-final').innerHTML=html;
+}
+
+// ── CONFIRMER ──
+async function confirmerResa(){
+  const btn=document.getElementById('btn-next');
+  btn.disabled=true;btn.textContent='Confirmation...';
+  try{
+    const ref='SW-'+Date.now().toString(36).toUpperCase().slice(-6);
+    await sb('reservations','POST',{
+      activite_id:S.activite.id,formule_id:S.formule.id,
+      date:S.date,heure_arrivee:S.creneau+':00',
+      duree_min:S.formule.duree_min,
+      nb_personnes:S.nb03+S.nb412,nb_adultes:S.nbA,
+      nom_client:S.prenom+' '+S.nom,email_client:S.email,
+      telephone_client:S.tel,prenom_enfant:S.cpn||null,age_enfant:S.cage||null,
+      montant_total:calcTotal(),montant_acompte:0,
+      statut:'confirmee',origine:'site_web',notes:S.notes||null,
+    });
+    document.getElementById('confirm-ref').textContent='Référence '+ref;
+    const ddate=new Date(S.date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+    document.getElementById('confirm-infos').innerHTML=`
+      <div class="recap-row"><span class="rl">Activité</span><span class="rv">${S.activite.nom}</span></div>
+      <div class="recap-row"><span class="rl">Date</span><span class="rv">${ddate} à ${S.creneau}</span></div>
+      <div class="recap-row"><span class="rl">Formule</span><span class="rv">${S.formule.nom}</span></div>
+      <div class="recap-row"><span class="rl">Participants</span><span class="rv">${S.nb03+S.nb412} enfant(s) + ${S.nbA} adulte(s)</span></div>
+      <div class="recap-row"><span class="rl">Total sur place</span><span class="rv">${fmt(calcTotal())}</span></div>`;
+    goStep(6);
+  }catch(e){
+    toast('Erreur : '+e.message,'err');
+    btn.disabled=false;btn.textContent='Confirmer →';
+  }
+}
+
+// ── NAVIGATION ──
+let currentStep=1;
+function updBtnNext(){
+  const btn=document.getElementById('btn-next');
+  if(currentStep===1)btn.disabled=(S.nb03+S.nb412)===0;
+  else if(currentStep===2)btn.disabled=!S.date||!S.creneau;
+  else if(currentStep===3)btn.disabled=!S.formule;
+  else if(currentStep===4)btn.disabled=false;
+  else if(currentStep===5)btn.disabled=false;
+}
+
+function nextStep(){
+  if(currentStep===1){
+    if(S.nb03+S.nb412===0){toast('Ajoutez au moins 1 enfant','err');return;}
+  }
+  if(currentStep===3){
+    if(!S.formule){toast('Choisissez une formule','err');return;}
+  }
+  if(currentStep===4){
+    S.prenom=document.getElementById('f-prenom').value.trim();
+    S.nom=document.getElementById('f-nom').value.trim();
+    S.email=document.getElementById('f-email').value.trim();
+    S.tel=document.getElementById('f-tel').value.trim();
+    S.notes=document.getElementById('f-notes').value.trim();
+    if(S.activite?.slug==='anniversaire'){S.cpn=document.getElementById('f-cpn').value.trim();S.cage=parseInt(document.getElementById('f-cage').value)||null;}
+    if(!S.prenom||!S.nom||!S.email||!S.tel){toast('Remplissez tous les champs obligatoires','err');return;}
+    renderRecapFinal();
+  }
+  if(currentStep===5){confirmerResa();return;}
+  goStep(currentStep+1);
+}
+
+function goStep(n){
+  if(n===3&&(S.nb03+S.nb412)===0){S.nb03=1;}// Default 1 enfant
+  currentStep=n;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  // Progress
+  for(let i=1;i<=5;i++){
+    const c=document.getElementById('sc'+i);
+    const l=document.getElementById('sl'+i);
+    if(i<n){c.className='step-dot done';c.textContent='✓';}
+    else if(i===n){c.className='step-dot active';c.textContent=i;}
+    else{c.className='step-dot';c.textContent=i;}
+    if(l){l.className='step-txt'+(i===n?' active':'');}
+    if(i<5){const line=document.getElementById('line'+i);if(line)line.className='step-line'+(i<n?' done':'');}
+  }
+  // Actions
+  const sticky=document.getElementById('total-sticky');
+  sticky.style.display=n>=1&&n<=5?'flex':'none';
+  const btnTxt={1:'Choisir une date →',2:'Choisir une formule →',3:'Mes coordonnées →',4:'Voir le récap →',5:'Confirmer ma réservation ✅'};
+  document.getElementById('btn-next').textContent=btnTxt[n]||'Continuer →';
+  if(n===1){updNb();}
+  if(n===2){// Charger toutes les activités si pas encore fait
+    if(!S.activite&&ALL.activites.length){S.activite=ALL.activites[0];}
+    renderCal();
+  }
+  if(n===3){renderFormules3();}
+  if(n===4)document.getElementById('anniv-section').style.display=S.activite?.slug==='anniversaire'?'block':'none';
+  updTotal();updBtnNext();
+  window.scrollTo(0,0);
+}
+
+function updNb(){
+  document.getElementById('nb03v').textContent=S.nb03;
+  document.getElementById('nb412v').textContent=S.nb412;
+  document.getElementById('nbAv').textContent=S.nbA;
+}
+
+// ── TOAST ──
+let toastT;
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.className='show '+type;t.innerHTML=(type==='ok'?'✅':'❌')+' '+msg;
+  clearTimeout(toastT);toastT=setTimeout(()=>t.className='',3000);
+}
+
+init();
+</script>
+</body>
+</html>
