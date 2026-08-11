@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Réserver — Sweety Sweety Roanne</title>
+<meta name="description" content="Réservez vos entrées ou votre anniversaire chez Sweety Sweety à Mably.">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0}body{font-family:Nunito,sans-serif;background:#fff9fc;color:#2b1743}
+:root{--pink:#ff3d9a;--purple:#7d41d8;--green:#21c979;--yellow:#ffd94a;--ink:#2b1743;--muted:#7c7188;--line:#eadff0;--soft:#faf4ff;--blue:#39bff4}
+button,input,textarea{font:inherit}.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topin{max-width:1100px;margin:auto;height:68px;padding:0 18px;display:flex;align-items:center;justify-content:space-between}.brand{font-family:"Baloo 2";font-size:1.35rem;font-weight:800;color:var(--ink);text-decoration:none}.brand b{color:var(--pink)}.back{font-weight:800;color:var(--muted);text-decoration:none;font-size:.88rem}
+.progress{max-width:760px;margin:20px auto 0;padding:0 18px;display:flex;align-items:center}.pstep{display:flex;align-items:center;gap:7px;color:#b4a8bd;font-weight:900;font-size:.74rem}.pdot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:2px solid #e6dbe9;background:#fff}.pstep.on{color:var(--ink)}.pstep.on .pdot{background:var(--pink);border-color:var(--pink);color:#fff}.pstep.done .pdot{background:var(--green);border-color:var(--green);color:#fff}.pline{height:2px;background:#eadff0;flex:1;margin:0 9px}.pline.done{background:var(--green)}
+.wrap{max-width:920px;margin:auto;padding:28px 18px 110px}.screen{display:none}.screen.on{display:block;animation:in .25s ease}@keyframes in{from{opacity:.25;transform:translateY(8px)}}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:100px;padding:6px 11px;color:var(--purple);font-weight:900;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+h1{font-family:"Baloo 2";font-size:clamp(2rem,5vw,3.2rem);line-height:1.02;margin:12px 0 8px}h2{font-family:"Baloo 2";font-size:1.35rem;margin:0}.sub{color:var(--muted);line-height:1.55;margin:0 0 24px}
+.intent-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.intent{border:2px solid var(--line);border-radius:24px;background:#fff;padding:24px;cursor:pointer;text-align:left;transition:.18s;position:relative;overflow:hidden}.intent:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(65,30,80,.09)}.intent.sel{border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,61,154,.09)}.intent .ico{font-size:2.4rem}.intent h2{margin:10px 0 5px}.intent p{margin:0;color:var(--muted);line-height:1.45}.intent .tag{margin-top:15px;display:inline-flex;padding:6px 10px;border-radius:100px;background:#fff0f7;color:#c92270;font-size:.76rem;font-weight:900}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:16px;box-shadow:0 8px 30px rgba(63,29,79,.04)}
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.person{background:var(--soft);border-radius:16px;padding:16px}.person b{display:block;margin-bottom:12px}.counter{display:flex;align-items:center;justify-content:space-between}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;font-weight:900;font-size:1.2rem;cursor:pointer}.cval{font-family:"Baloo 2";font-weight:800;font-size:1.4rem}
+.calhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.calnav{border:0;background:var(--soft);border-radius:12px;width:38px;height:38px;cursor:pointer;font-weight:900}.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.dow{text-align:center;color:#aa9db4;font-size:.68rem;font-weight:900;padding:5px}.day{aspect-ratio:1;border:1px solid transparent;border-radius:12px;display:grid;place-items:center;font-weight:900;cursor:pointer}.day.off{color:#d3cbd8;cursor:not-allowed}.day.ok{background:#f2fff8;color:#169d5e;border-color:#d3f4e3}.day.sel{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff}.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px}.slot{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px;cursor:pointer;text-align:center;font-weight:900}.slot small{display:block;color:var(--muted);margin-top:2px}.slot.sel{border-color:var(--purple);background:#f7f0ff;color:var(--purple)}.slot.full{opacity:.4;cursor:not-allowed}
+.offer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}.offer{position:relative;background:#fff;border:2px solid var(--line);border-radius:20px;padding:19px;cursor:pointer;transition:.18s}.offer:hover{transform:translateY(-2px)}.offer.sel{border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,61,154,.08)}.offer.reco{border-color:#f0c93b;background:linear-gradient(180deg,#fffdf0,#fff)}.badge{position:absolute;top:-10px;left:14px;padding:5px 10px;border-radius:100px;background:var(--yellow);font-size:.68rem;font-weight:900}.offer-name{font-family:"Baloo 2";font-size:1.15rem;font-weight:800;margin:4px 0}.offer-desc{color:var(--muted);font-size:.82rem;min-height:40px}.price{font-family:"Baloo 2";font-size:1.55rem;font-weight:800;color:var(--pink);margin-top:12px}.price small{font-family:Nunito;font-size:.72rem;color:var(--muted)}
+.upsell{margin-top:18px;border:2px solid #ffe48a;background:linear-gradient(135deg,#fffbee,#fff4fa);border-radius:22px;padding:20px}.upsell-head{display:flex;gap:12px;align-items:flex-start}.upsell-ico{font-size:2rem}.upsell-title{font-family:"Baloo 2";font-weight:800;font-size:1.25rem}.upsell-sub{color:var(--muted);font-size:.86rem}.upgrade-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}.upgrade{background:#fff;border:1px solid #efdca1;border-radius:16px;padding:14px;cursor:pointer}.upgrade:hover{border-color:#e5b600}.delta{color:#c88f00;font-weight:900;font-size:.78rem;margin-top:7px}.upgrade button{margin-top:9px;width:100%;border:0;border-radius:100px;padding:9px;background:var(--ink);color:#fff;font-weight:900;cursor:pointer}
+.options{display:grid;gap:9px}.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:15px;padding:13px;background:#fff;cursor:pointer}.opt.sel{border-color:var(--green);background:#f2fff8}.optinfo{flex:1}.optname{font-weight:900}.optdesc{color:var(--muted);font-size:.76rem}.optprice{font-weight:900;color:#15965b}
+.entry-lines{display:grid;gap:8px}.entry-line{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 0;border-bottom:1px dashed var(--line)}.entry-line:last-child{border-bottom:0}.entry-line b{font-size:.95rem}.entry-line small{display:block;color:var(--muted);font-weight:700;margin-top:2px}.entry-line .ep{font-family:"Baloo 2";font-size:1.15rem;font-weight:800;color:var(--pink);white-space:nowrap}.entry-total{margin-top:12px;padding-top:12px;border-top:2px solid var(--line);display:flex;justify-content:space-between;align-items:center}.entry-total strong{font-family:"Baloo 2";font-size:1.45rem;color:var(--ink)}.entry-total b{font-family:"Baloo 2";font-size:1.55rem;color:var(--pink)}.chosen-upgrade{margin-top:12px;background:#f2fff8;border:1px solid #bfead2;border-radius:14px;padding:12px 14px;color:#15734a;font-weight:900}.upgrade.selected{border:2px solid var(--green);background:#f2fff8}.upgrade.selected button{background:var(--green);color:#0b4228}
+
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.74rem;font-weight:900;color:var(--muted);text-transform:uppercase}.field input,.field textarea{border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px 13px;outline:none}.field input:focus,.field textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(125,65,216,.08)}
+.recap{display:grid;gap:9px}.rrow{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line)}.rrow:last-child{border:0}.rrow span:first-child{color:var(--muted)}.rtotal{font-family:"Baloo 2";font-size:1.35rem;font-weight:800;color:var(--pink)}
+.sticky{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line)}.stickin{max-width:920px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}.tot small{display:block;color:var(--muted);font-weight:800}.tot b{font-family:"Baloo 2";font-size:1.45rem;color:var(--pink)}.next{border:0;border-radius:100px;padding:13px 23px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;font-weight:900;cursor:pointer;box-shadow:0 7px 22px rgba(255,61,154,.25)}.next:disabled{opacity:.35;cursor:not-allowed}.prev{border:0;background:transparent;color:var(--muted);font-weight:900;cursor:pointer;margin-bottom:14px}.notice{padding:12px 14px;border-radius:13px;background:#f2fff8;color:#147b4e;font-size:.82rem;font-weight:800}.success{text-align:center;padding:50px 10px}.success .big{font-size:4.5rem}.success h1{margin-top:10px}
+@media(max-width:650px){.intent-grid,.people,.formgrid{grid-template-columns:1fr}.progress .plabel{display:none}.wrap{padding-top:20px}.intent{padding:18px}.offer-grid{grid-template-columns:1fr}.upgrade-grid{grid-template-columns:1fr}.stickin{padding-bottom:max(12px,env(safe-area-inset-bottom))}}
+</style>
+</head>
+<body>
+<div class="top"><div class="topin"><a class="brand" href="index.html">🌴 Sweety <b>Sweety</b></a><a class="back" href="index.html">← Retour au site</a></div></div>
+<div class="progress" id="progress"></div>
+<main class="wrap">
+<section class="screen on" id="s1">
+  <span class="eyebrow">✨ Réservation facile</span><h1>Qu’est-ce qu’on prépare ?</h1>
+  <p class="sub">Deux parcours, zéro prise de tête. Choisissez votre visite et on vous propose seulement les options qui ont du sens.</p>
+  <div class="intent-grid">
+    <button class="intent" id="intent-entree" onclick="chooseIntent('entree')"><div class="ico">🎟️</div><h2>Je viens jouer</h2><p>Entrée 2h, puis possibilité de passer à 3h avec goûter ou repas.</p><span class="tag">Le plus simple</span></button>
+    <button class="intent" id="intent-anniversaire" onclick="chooseIntent('anniversaire')"><div class="ico">🎂</div><h2>Je fête un anniversaire</h2><p>Une formule prête à l’emploi, puis des upgrades 3h, VR, Splash Room ou chasse au trésor.</p><span class="tag">Moment waouh</span></button>
+  </div>
+</section>
+
+<section class="screen" id="s2">
+  <button class="prev" onclick="go(1)">← Modifier mon choix</button>
+  <span class="eyebrow" id="people-eye">👥 Participants</span><h1 id="people-title">Combien serez-vous ?</h1><p class="sub" id="people-sub"></p>
+  <div class="panel"><div class="people">
+    <div class="person"><b>👶 Enfants 0–3 ans</b><div class="counter"><button class="cbtn" onclick="chg('nb03',-1)">−</button><span class="cval" id="nb03">0</span><button class="cbtn" onclick="chg('nb03',1)">+</button></div></div>
+    <div class="person"><b>🧒 Enfants 4–12 ans</b><div class="counter"><button class="cbtn" onclick="chg('nb412',-1)">−</button><span class="cval" id="nb412">0</span><button class="cbtn" onclick="chg('nb412',1)">+</button></div></div>
+    <div class="person"><b>👨‍👩‍👧 Adultes</b><div class="counter"><button class="cbtn" onclick="chg('nbA',-1)">−</button><span class="cval" id="nbA">0</span><button class="cbtn" onclick="chg('nbA',1)">+</button></div></div>
+  </div></div>
+  <div class="notice" style="margin-top:12px">ℹ️ Les adultes accompagnateurs sont gratuits pour les entrées classiques.</div>
+</section>
+
+<section class="screen" id="s3">
+  <button class="prev" onclick="go(2)">← Modifier les participants</button>
+  <span class="eyebrow">📅 Date & heure</span><h1>Quand venez-vous ?</h1><p class="sub">Choisissez une date puis votre heure d’arrivée.</p>
+  <div class="panel"><div class="calhead"><button class="calnav" onclick="navMonth(-1)">‹</button><h2 id="month"></h2><button class="calnav" onclick="navMonth(1)">›</button></div><div class="calgrid" id="cal"></div></div>
+  <div class="panel" id="slot-panel" style="display:none"><h2 style="margin-bottom:12px">Heure d’arrivée</h2><div class="slots" id="slots"></div></div>
+</section>
+
+<section class="screen" id="s4">
+  <button class="prev" onclick="go(3)">← Modifier la date</button>
+  <span class="eyebrow">⭐ Votre visite</span><h1 id="offer-title">Votre réservation</h1><p class="sub" id="offer-sub"></p>
+
+  <div id="entry-summary" class="panel" style="display:none"></div>
+
+  <div class="offer-grid" id="offers"></div>
+  <div id="upsell-box"></div>
+
+  <div class="panel" id="opt-panel" style="display:none">
+    <h2 style="margin-bottom:6px">Pour personnaliser encore</h2>
+    <p class="sub" style="margin-bottom:12px">Ces options restent totalement facultatives.</p>
+    <div class="options" id="options"></div>
+  </div>
+</section>
+
+<section class="screen" id="s5">
+  <button class="prev" onclick="go(4)">← Modifier la formule</button>
+  <span class="eyebrow">👤 Vos coordonnées</span><h1>Presque terminé</h1><p class="sub">On garde seulement les informations utiles à votre réservation.</p>
+  <div class="panel"><div class="formgrid">
+    <div class="field"><label>Prénom *</label><input id="prenom"></div><div class="field"><label>Nom *</label><input id="nom"></div>
+    <div class="field"><label>Email *</label><input id="email" type="email"></div><div class="field"><label>Téléphone *</label><input id="tel" type="tel"></div>
+    <div class="field birthday" style="display:none"><label>Prénom de l’enfant fêté *</label><input id="cpn"></div><div class="field birthday" style="display:none"><label>Âge *</label><input id="cage" type="number" min="1" max="15"></div>
+    <div class="field full"><label>Allergies / demande spéciale</label><textarea id="notes" rows="3"></textarea></div>
+  </div></div>
+</section>
+
+<section class="screen" id="s6">
+  <button class="prev" onclick="go(5)">← Modifier mes informations</button>
+  <span class="eyebrow">✅ Vérification</span><h1>Tout est bon ?</h1><p class="sub">Vérifiez votre réservation avant de confirmer.</p>
+  <div class="panel recap" id="recap"></div>
+  <div class="notice" style="margin-top:12px">💳 Règlement sur place. Aucun paiement en ligne n’est demandé ici.</div>
+</section>
+
+<section class="screen" id="s7"><div class="success"><div class="big">🎉</div><h1>C’est réservé !</h1><p class="sub">Votre réservation est bien enregistrée. À très vite chez Sweety Sweety.</p><div class="panel" id="success-info"></div><p><a class="next" style="display:inline-block;text-decoration:none" href="index.html">Retour au site</a></p></div></section>
+</main>
+<div class="sticky" id="sticky"><div class="stickin"><div class="tot"><small>Total estimé</small><b id="total">0,00 €</b></div><button class="next" id="next" onclick="next()">Continuer →</button></div></div>
+<script>
+const SB='https://kqasgptqvwpykjqqqnlg.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxYXNncHRxdndweWtqcXFxbmxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MDk0MTMsImV4cCI6MjA5MzI4NTQxM30.OYkx112Rvkgdr3H45mKjotsNXOuQGpHGCN0aCF9o0YM';
+
+async function sb(t,m='GET',b=null,f=''){
+  const r=await fetch(SB+'/rest/v1/'+t+f,{
+    method:m,
+    headers:{apikey:SK,Authorization:'Bearer '+SK,'Content-Type':'application/json',Prefer:'return=representation'},
+    body:b?JSON.stringify(b):undefined
+  });
+  if(!r.ok)throw new Error(await r.text());
+  const x=await r.text();
+  return x?JSON.parse(x):[];
+}
+
+const S={
+  step:1,
+  intent:null,
+  activity:null,
+  formula:null,       // utilisé pour anniversaire uniquement
+  opts:[],            // options anniversaire uniquement
+  entryUpgrade:null,  // "gouter", "repas" ou null
+  date:null,
+  slot:null,
+  nb03:0,
+  nb412:0,
+  nbA:0
+};
+
+const ALL={activities:[],formulas:[],options:[]};
+let calDate=new Date();
+
+const fmt=n=>Number(n||0).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+const dstr=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,10)};
+const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[–—]/g,'-');
+
+async function init(){
+  try{
+    ALL.activities=await sb('activites','GET',null,'?actif=eq.true&order=ordre.asc');
+    for(const a of ALL.activities){
+      const fs=await sb('formules','GET',null,'?activite_id=eq.'+a.id+'&actif=eq.true&order=ordre.asc');
+      ALL.formulas.push(...fs.map(f=>({...f,_activity:a})));
+      for(const f of fs){
+        const os=await sb('options','GET',null,'?formule_id=eq.'+f.id+'&actif=eq.true');
+        ALL.options.push(...os);
+      }
+    }
+    const q=new URLSearchParams(location.search).get('type');
+    if(q==='entree'||q==='anniversaire')chooseIntent(q);
+  }catch(e){
+    console.error(e);
+    alert("Impossible de charger les formules. Vérifiez la connexion Supabase.");
+  }
+  renderProgress();
+  updateBar();
+}
+
+function activityFor(intent){
+  return ALL.activities.find(a=>{
+    const n=norm((a.slug||'')+' '+(a.nom||''));
+    return intent==='anniversaire'?n.includes('anniv'):n.includes('entree');
+  }) || (intent==='anniversaire'?ALL.activities[1]:ALL.activities[0]);
+}
+
+function chooseIntent(v){
+  S.intent=v;
+  S.activity=activityFor(v);
+  S.formula=null;
+  S.opts=[];
+  S.entryUpgrade=null;
+  S.date=null;
+  S.slot=null;
+  document.querySelectorAll('.intent').forEach(x=>x.classList.remove('sel'));
+  document.getElementById('intent-'+v)?.classList.add('sel');
+  setTimeout(()=>go(2),120);
+}
+
+function chg(k,d){
+  S[k]=Math.max(0,Math.min(50,S[k]+d));
+  document.getElementById(k).textContent=S[k];
+  // Toute modification des participants invalide les calculs commerciaux précédents
+  if(S.intent==='entree')S.entryUpgrade=null;
+  updateBar();
+}
+
+function renderProgress(){
+  const labels=['Choix','Participants','Date','Offre','Infos','Validation'];
+  let h='';
+  labels.forEach((x,i)=>{
+    const n=i+1;
+    h+=`<div class="pstep ${n===S.step?'on':n<S.step?'done':''}"><span class="pdot">${n<S.step?'✓':n}</span><span class="plabel">${x}</span></div>`;
+    if(i<labels.length-1)h+=`<div class="pline ${n<S.step?'done':''}"></div>`;
+  });
+  document.getElementById('progress').innerHTML=h;
+}
+
+function go(n){
+  S.step=n;
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  renderProgress();
+
+  if(n===2){
+    document.getElementById('people-title').textContent=S.intent==='anniversaire'?'Combien d’enfants à la fête ?':'Qui vient jouer ?';
+    document.getElementById('people-sub').textContent=S.intent==='anniversaire'
+      ?'Indiquez le nombre d’enfants invités et les adultes accompagnateurs.'
+      :'Ces quantités serviront directement à calculer vos entrées. Vous n’aurez pas à les choisir une deuxième fois.';
+  }
+  if(n===3){calDate=new Date();renderCalendar()}
+  if(n===4)renderCommercialStep();
+  if(n===5)document.querySelectorAll('.birthday').forEach(x=>x.style.display=S.intent==='anniversaire'?'grid':'none');
+  if(n===6)renderRecap();
+
+  document.getElementById('sticky').style.display=n<=6?'block':'none';
+  updateBar();
+  scrollTo({top:0,behavior:'smooth'});
+}
+
+function next(){
+  if(S.step===1){if(!S.intent)return;go(2);return}
+  if(S.step===2){
+    if(S.nb03+S.nb412<1){alert('Ajoutez au moins un enfant.');return}
+    go(3);return
+  }
+  if(S.step===3){
+    if(!S.date||!S.slot){alert('Choisissez une date et une heure.');return}
+    go(4);return
+  }
+  if(S.step===4){
+    if(S.intent==='anniversaire'&&!S.formula){alert('Choisissez une formule anniversaire.');return}
+    if(S.intent==='entree'&&!entryBaseLines().length){alert("Aucun tarif d'entrée correspondant aux participants n'a été trouvé.");return}
+    go(5);return
+  }
+  if(S.step===5){
+    for(const id of ['prenom','nom','email','tel']){
+      if(!document.getElementById(id).value.trim()){alert('Merci de remplir les champs obligatoires.');return}
+    }
+    if(S.intent==='anniversaire'&&(!document.getElementById('cpn').value.trim()||!document.getElementById('cage').value)){
+      alert("Indiquez le prénom et l’âge de l’enfant fêté.");return
+    }
+    go(6);return
+  }
+  if(S.step===6)confirmReservation();
+}
+
+function updateBar(){
+  document.getElementById('total').textContent=fmt(total());
+  const b=document.getElementById('next');
+  const txt={1:'Je choisis →',2:'Choisir une date →',3:'Voir mon offre →',4:'Continuer →',5:'Voir le récap →',6:'Confirmer la réservation ✅'};
+  b.textContent=txt[S.step]||'Continuer →';
+  b.disabled=(S.step===1&&!S.intent)||(S.step===2&&S.nb03+S.nb412<1)||(S.step===3&&(!S.date||!S.slot))||(S.step===4&&S.intent==='anniversaire'&&!S.formula);
+}
+
+const VAC=[['2026-07-04','2026-09-01'],['2026-10-17','2026-11-02'],['2026-12-19','2027-01-04']];
+function openDay(d){
+  const s=dstr(d),day=d.getDay();
+  const vac=VAC.some(([a,b])=>s>=a&&s<=b);
+  return vac?day!==1:[0,3,6].includes(day);
+}
+function navMonth(d){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+d,1);renderCalendar()}
+function renderCalendar(){
+  const y=calDate.getFullYear(),m=calDate.getMonth(),names=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('month').textContent=names[m]+' '+y;
+  const today=new Date();today.setHours(0,0,0,0);
+  const first=new Date(y,m,1),last=new Date(y,m+1,0).getDate(),offset=(first.getDay()+6)%7;
+  let h=['L','M','M','J','V','S','D'].map(x=>`<div class="dow">${x}</div>`).join('');
+  for(let i=0;i<offset;i++)h+='<div></div>';
+  for(let n=1;n<=last;n++){
+    const d=new Date(y,m,n),s=dstr(d),off=d<today||!openDay(d);
+    h+=`<div class="day ${off?'off':S.date===s?'sel':'ok'}" ${off?'':`onclick="pickDate('${s}')"`}>${n}</div>`;
+  }
+  document.getElementById('cal').innerHTML=h;
+}
+async function pickDate(s){S.date=s;S.slot=null;renderCalendar();await renderSlots()}
+async function renderSlots(){
+  const p=document.getElementById('slot-panel'),g=document.getElementById('slots');
+  p.style.display='block';g.innerHTML='Chargement…';
+  const d=new Date(S.date+'T12:00:00'),jour=(d.getDay()+6)%7,aid=S.activity?.id;
+  let cs=[],rs=[];
+  try{
+    cs=await sb('creneaux_config','GET',null,'?activite_id=eq.'+aid+'&actif=eq.true');
+    rs=await sb('reservations','GET',null,'?activite_id=eq.'+aid+'&date=eq.'+S.date+'&statut=not.in.(annulee,no_show)');
+  }catch(e){}
+  cs=cs.filter(c=>c.jour_semaine===null||c.jour_semaine===jour).sort((a,b)=>a.heure_debut.localeCompare(b.heure_debut));
+  if(!cs.length){g.innerHTML='<div class="sub">Aucun créneau configuré pour cette date.</div>';return}
+  g.innerHTML=cs.map(c=>{
+    const h=c.heure_debut.slice(0,5);
+    const used=rs.filter(r=>(r.heure_arrivee||'').slice(0,5)===h).reduce((a,r)=>a+Number(r.nb_personnes||0),0);
+    const left=Number(S.activity?.jauge_max||50)-used;
+    const full=left<(S.nb03+S.nb412);
+    return `<button class="slot ${full?'full':''} ${S.slot===h?'sel':''}" ${full?'disabled':`onclick="pickSlot('${h}',this)"`}>${h}<small>${full?'Complet':left+' places'}</small></button>`;
+  }).join('');
+}
+function pickSlot(h,el){
+  S.slot=h;
+  document.querySelectorAll('.slot').forEach(x=>x.classList.remove('sel'));
+  if(el)el.classList.add('sel');
+  updateBar();
+}
+
+/* =========================
+   LOGIQUE COMMERCIALE ENTRÉES
+   ========================= */
+
+function activityFormulas(){
+  return ALL.formulas.filter(f=>f.activite_id===S.activity?.id)
+    .sort((a,b)=>Number(a.duree_min)-Number(b.duree_min)||Number(a.prix)-Number(b.prix));
+}
+
+function formulaBucket(f){
+  const n=norm((f.nom||'')+' '+(f.description||''));
+  if(n.includes('adulte'))return 'adult';
+  if(/0\s*[-aà]\s*3/.test(n)||n.includes('0-3')||n.includes('0 3'))return '03';
+  if(/4\s*[-aà]\s*12/.test(n)||n.includes('4-12')||n.includes('4 12'))return '412';
+  return 'generic';
+}
+
+function formulaUnitPrice(f,bucketQty){
+  const p=Number(f?.prix||0);
+  // Pour les tarifs d'entrée, une formule par tranche d'âge doit être multipliée
+  // uniquement par la quantité de CETTE tranche, jamais par tous les enfants.
+  if(f?.prix_par_personne)return p*bucketQty;
+  // Si un forfait a nb_personnes_max, on le considère comme forfait.
+  if(Number(f?.nb_personnes_max||0)>0)return p;
+  // Pour une ligne tarifaire âge, prix = prix unitaire x quantité.
+  return p*bucketQty;
+}
+
+function entryBaseFormula(bucket){
+  const fs=activityFormulas().filter(f=>formulaBucket(f)===bucket);
+  if(!fs.length)return null;
+  // Base = formule la plus courte, puis la moins chère.
+  return fs.sort((a,b)=>Number(a.duree_min||120)-Number(b.duree_min||120)||Number(a.prix)-Number(b.prix))[0];
+}
+
+function entryBaseLines(){
+  if(S.intent!=='entree')return [];
+  const lines=[];
+  const f03=entryBaseFormula('03');
+  const f412=entryBaseFormula('412');
+  const fa=entryBaseFormula('adult');
+
+  if(S.nb03>0&&f03)lines.push({bucket:'03',qty:S.nb03,label:'Enfant 0–3 ans',formula:f03,cost:formulaUnitPrice(f03,S.nb03)});
+  if(S.nb412>0&&f412)lines.push({bucket:'412',qty:S.nb412,label:'Enfant 4–12 ans',formula:f412,cost:formulaUnitPrice(f412,S.nb412)});
+
+  // Adultes : s'il existe vraiment un tarif adulte > 0, on l'utilise.
+  // Sinon ils restent gratuits comme annoncé dans le tunnel.
+  if(S.nbA>0&&fa&&Number(fa.prix||0)>0){
+    lines.push({bucket:'adult',qty:S.nbA,label:'Adulte accompagnateur',formula:fa,cost:formulaUnitPrice(fa,S.nbA)});
+  }
+  return lines;
+}
+
+function optionKind(o){
+  const n=norm((o.nom||'')+' '+(o.description||''));
+  if(n.includes('repas')||n.includes('menu')||n.includes('pizza'))return 'repas';
+  if(n.includes('gouter')||n.includes('donut')||n.includes('boisson'))return 'gouter';
+  return null;
+}
+
+function entryUpgradeEntries(kind){
+  if(!kind)return [];
+  const entries=[];
+  for(const line of entryBaseLines()){
+    const opts=ALL.options.filter(o=>o.formule_id===line.formula.id&&optionKind(o)===kind);
+    if(!opts.length)continue;
+    // S'il y a plusieurs options du même genre, on prend la moins chère qui ajoute le plus de sens
+    const o=opts.sort((a,b)=>Number(a.prix)-Number(b.prix))[0];
+    let cost=Number(o.prix||0);
+    if(o.type==='per_person')cost*=line.qty;
+    entries.push({line,option:o,cost});
+  }
+  return entries;
+}
+
+function entryUpgradeCost(kind){
+  return entryUpgradeEntries(kind).reduce((s,x)=>s+x.cost,0);
+}
+
+function entryBaseTotal(){
+  return entryBaseLines().reduce((s,l)=>s+l.cost,0);
+}
+
+function entryDuration(){
+  const base=Math.max(120,...entryBaseLines().map(l=>Number(l.formula.duree_min||120)));
+  if(!S.entryUpgrade)return base;
+  const add=Math.max(0,...entryUpgradeEntries(S.entryUpgrade).map(x=>Number(x.option.duree_ajoutee_min||0)));
+  return base+add;
+}
+
+function renderEntryCommercial(){
+  const summary=document.getElementById('entry-summary');
+  const offers=document.getElementById('offers');
+  const upsell=document.getElementById('upsell-box');
+  const optPanel=document.getElementById('opt-panel');
+
+  offers.innerHTML='';
+  optPanel.style.display='none';
+
+  document.getElementById('offer-title').textContent='Votre visite est déjà calculée';
+  document.getElementById('offer-sub').textContent='On reprend exactement les participants choisis plus tôt. Vous ne choisissez pas vos entrées une deuxième fois.';
+
+  const lines=entryBaseLines();
+  if(!lines.length){
+    summary.style.display='block';
+    summary.innerHTML='<b>Impossible de calculer les entrées.</b><p class="sub" style="margin:6px 0 0">Vérifiez que les formules 0–3 ans et 4–12 ans sont bien configurées dans le back-office.</p>';
+    upsell.innerHTML='';
+    return;
+  }
+
+  summary.style.display='block';
+  summary.innerHTML=`
+    <h2 style="margin-bottom:4px">🎟️ Entrée 2h</h2>
+    <p class="sub" style="margin-bottom:12px">Votre panier de base selon les participants :</p>
+    <div class="entry-lines">
+      ${lines.map(l=>`<div class="entry-line"><div><b>${l.qty} × ${l.label}</b><small>${l.formula.nom} · ${Number(l.formula.duree_min||120)/60}h</small></div><div class="ep">${fmt(l.cost)}</div></div>`).join('')}
+      ${S.nbA>0&&!lines.some(l=>l.bucket==='adult')?`<div class="entry-line"><div><b>${S.nbA} × adulte${S.nbA>1?'s':''}</b><small>Accompagnateur${S.nbA>1?'s':''}</small></div><div class="ep">Gratuit</div></div>`:''}
+    </div>
+    <div class="entry-total"><strong>Total 2h</strong><b>${fmt(entryBaseTotal())}</b></div>
+    ${S.entryUpgrade?`<div class="chosen-upgrade">✓ Option ${S.entryUpgrade==='gouter'?'3h + goûter':'3h + repas'} ajoutée à toute la réservation</div>`:''}
+  `;
+
+  const ups=[];
+  const g=entryUpgradeEntries('gouter');
+  const r=entryUpgradeEntries('repas');
+  if(g.length)ups.push({kind:'gouter',ico:'🍩',title:'Passer à 3h + goûter',sub:'1h de jeu en plus + goûter',cost:entryUpgradeCost('gouter')});
+  if(r.length)ups.push({kind:'repas',ico:'🍕',title:'Passer à 3h + repas',sub:'1h de jeu en plus + repas',cost:entryUpgradeCost('repas')});
+
+  if(!ups.length){
+    upsell.innerHTML='';
+    return;
+  }
+
+  upsell.innerHTML=`
+    <div class="upsell">
+      <div class="upsell-head">
+        <div class="upsell-ico">✨</div>
+        <div>
+          <div class="upsell-title">Vous voulez rester un peu plus longtemps ?</div>
+          <div class="upsell-sub">Votre entrée 2h est déjà sélectionnée. Ici, on vous propose seulement de l’améliorer.</div>
+        </div>
+      </div>
+      <div class="upgrade-grid">
+        ${ups.map(u=>`
+          <div class="upgrade ${S.entryUpgrade===u.kind?'selected':''}">
+            <b>${u.ico} ${u.title}</b>
+            <div class="optdesc">${u.sub}</div>
+            <div class="delta">${u.cost>0?'Seulement +'+fmt(u.cost):'Inclus'}</div>
+            <button onclick="event.stopPropagation();setEntryUpgrade('${u.kind}')">
+              ${S.entryUpgrade===u.kind?'✓ Ajouté':'Oui, je choisis cette formule'}
+            </button>
+          </div>
+        `).join('')}
+      </div>
+      ${S.entryUpgrade?`<button onclick="setEntryUpgrade(null)" style="margin-top:12px;border:0;background:transparent;color:var(--muted);font-weight:900;cursor:pointer">Non merci, je reste sur 2h</button>`:''}
+    </div>`;
+}
+
+function setEntryUpgrade(kind){
+  S.entryUpgrade=(S.entryUpgrade===kind?null:kind);
+  renderEntryCommercial();
+  updateBar();
+}
+
+/* ============================
+   LOGIQUE COMMERCIALE ANNIVERSAIRE
+   ============================ */
+
+function formulaPrice(f){
+  const nb=S.nb03+S.nb412;
+  return Number(f?.prix||0)*(f?.prix_par_personne?nb:1);
+}
+
+function renderAnnivCommercial(){
+  document.getElementById('entry-summary').style.display='none';
+  document.getElementById('offer-title').textContent='Choisissez votre anniversaire';
+  document.getElementById('offer-sub').textContent='Le nombre d’enfants est conservé. Commencez avec la formule qui vous convient, puis ajoutez seulement les expériences qui vous intéressent.';
+
+  const fs=activityFormulas();
+  const offers=document.getElementById('offers');
+  if(!fs.length){
+    offers.innerHTML='<div class="panel">Aucune formule anniversaire configurée.</div>';
+    return;
+  }
+
+  offers.innerHTML=fs.map((f,i)=>{
+    const reco=i===1;
+    return `<article data-fid="${f.id}" class="offer ${reco?'reco':''} ${S.formula?.id===f.id?'sel':''}" onclick="pickFormula('${f.id}')">
+      ${reco?'<span class="badge">⭐ RECOMMANDÉ</span>':''}
+      <div class="offer-name">${f.nom}</div>
+      <div class="offer-desc">${f.description||`${f.duree_min||120} min de fête`}</div>
+      <div class="price">${fmt(formulaPrice(f))} <small>${f.prix_par_personne?'pour '+(S.nb03+S.nb412)+' enfant(s)':'le forfait'}</small></div>
+    </article>`;
+  }).join('');
+
+  if(!S.formula)S.formula=fs[0];
+  document.querySelectorAll('.offer').forEach(x=>x.classList.toggle('sel',x.dataset.fid===String(S.formula.id)));
+  renderAnnivUpsell();
+  renderAnnivOptions();
+}
+
+function pickFormula(id){
+  S.formula=ALL.formulas.find(f=>String(f.id)===String(id));
+  S.opts=[];
+  renderAnnivCommercial();
+  updateBar();
+}
+
+function renderAnnivUpsell(){
+  const box=document.getElementById('upsell-box');
+  const fs=activityFormulas(),cur=S.formula;
+  if(!cur){box.innerHTML='';return}
+
+  const better=fs
+    .filter(f=>String(f.id)!==String(cur.id)&&formulaPrice(f)>formulaPrice(cur))
+    .sort((a,b)=>formulaPrice(a)-formulaPrice(b))
+    .slice(0,3);
+
+  if(!better.length){box.innerHTML='';return}
+
+  box.innerHTML=`
+    <div class="upsell">
+      <div class="upsell-head">
+        <div class="upsell-ico">🎂</div>
+        <div>
+          <div class="upsell-title">Et si on rendait la fête encore plus mémorable ?</div>
+          <div class="upsell-sub">On compare uniquement avec la formule que vous venez de choisir.</div>
+        </div>
+      </div>
+      <div class="upgrade-grid">
+        ${better.map(f=>`
+          <div class="upgrade">
+            <b>${f.nom}</b>
+            <div class="optdesc">${f.description||((f.duree_min||0)+' min')}</div>
+            <div class="delta">Seulement +${fmt(formulaPrice(f)-formulaPrice(cur))}</div>
+            <button onclick="event.stopPropagation();pickFormula('${f.id}')">Oui, je passe à ${f.nom}</button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderAnnivOptions(){
+  const panel=document.getElementById('opt-panel'),el=document.getElementById('options');
+  const os=ALL.options.filter(o=>String(o.formule_id)===String(S.formula?.id));
+  if(!os.length){panel.style.display='none';return}
+  panel.style.display='block';
+  el.innerHTML=os.map(o=>{
+    const selected=S.opts.includes(o.id),n=norm(o.nom);
+    const ico=n.includes('vr')?'🥽':n.includes('splash')?'🎨':n.includes('tresor')?'🗺️':n.includes('gouter')?'🍩':n.includes('repas')?'🍕':'✨';
+    return `<div class="opt ${selected?'sel':''}" onclick="toggleOpt('${o.id}')">
+      <span style="font-size:1.5rem">${ico}</span>
+      <div class="optinfo"><div class="optname">${o.nom}</div><div class="optdesc">${o.description||''}${o.duree_ajoutee_min?` · +${o.duree_ajoutee_min} min`:''}</div></div>
+      <div class="optprice">+${fmt(optionCost(o))}</div>
+    </div>`;
+  }).join('');
+}
+
+function optionCost(o){
+  const nb=S.nb03+S.nb412;
+  return Number(o.prix||0)*(o.type==='per_person'?nb:1);
+}
+function toggleOpt(id){
+  S.opts.includes(id)?S.opts=S.opts.filter(x=>x!==id):S.opts.push(id);
+  renderAnnivOptions();
+  updateBar();
+}
+
+function renderCommercialStep(){
+  if(S.intent==='entree')renderEntryCommercial();
+  else renderAnnivCommercial();
+}
+
+/* =========================
+   TOTAUX / RÉCAP / SAUVEGARDE
+   ========================= */
+
+function total(){
+  if(S.intent==='entree'){
+    return entryBaseTotal()+(S.entryUpgrade?entryUpgradeCost(S.entryUpgrade):0);
+  }
+  return formulaPrice(S.formula)+ALL.options.filter(o=>S.opts.includes(o.id)).reduce((a,o)=>a+optionCost(o),0);
+}
+
+function duration(){
+  if(S.intent==='entree')return entryDuration();
+  return Number(S.formula?.duree_min||120)+ALL.options.filter(o=>S.opts.includes(o.id)).reduce((a,o)=>a+Number(o.duree_ajoutee_min||0),0);
+}
+
+function renderRecap(){
+  const date=new Date(S.date+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  let commercial='';
+
+  if(S.intent==='entree'){
+    const lines=entryBaseLines();
+    commercial=`
+      ${lines.map(l=>`<div class="rrow"><span>${l.qty} × ${l.label}</span><b>${fmt(l.cost)}</b></div>`).join('')}
+      ${S.nbA>0&&!lines.some(l=>l.bucket==='adult')?`<div class="rrow"><span>${S.nbA} adulte(s)</span><b>Gratuit</b></div>`:''}
+      ${S.entryUpgrade?`<div class="rrow"><span>Upgrade</span><b>${S.entryUpgrade==='gouter'?'3h + goûter':'3h + repas'} (+${fmt(entryUpgradeCost(S.entryUpgrade))})</b></div>`:''}
+    `;
+  }else{
+    const os=ALL.options.filter(o=>S.opts.includes(o.id));
+    commercial=`
+      <div class="rrow"><span>Formule</span><b>${S.formula?.nom||''}</b></div>
+      ${os.map(o=>`<div class="rrow"><span>+ ${o.nom}</span><b>${fmt(optionCost(o))}</b></div>`).join('')}
+    `;
+  }
+
+  document.getElementById('recap').innerHTML=`
+    <div class="rrow"><span>Réservation</span><b>${S.intent==='anniversaire'?'Anniversaire':'Entrées parc'}</b></div>
+    <div class="rrow"><span>Date</span><b>${date} à ${S.slot}</b></div>
+    <div class="rrow"><span>Participants</span><b>${S.nb03} enfant(s) 0–3 · ${S.nb412} enfant(s) 4–12 · ${S.nbA} adulte(s)</b></div>
+    ${commercial}
+    <div class="rrow"><span>Durée prévue</span><b>${duration()} min</b></div>
+    <div class="rrow"><span>Total sur place</span><b class="rtotal">${fmt(total())}</b></div>`;
+}
+
+function primaryFormulaId(){
+  if(S.intent==='anniversaire')return S.formula?.id||null;
+  const lines=entryBaseLines();
+  // priorité à la tranche 4-12, sinon 0-3, sinon première ligne
+  return lines.find(l=>l.bucket==='412')?.formula.id || lines.find(l=>l.bucket==='03')?.formula.id || lines[0]?.formula.id || null;
+}
+
+function reservationNotes(){
+  const base=document.getElementById('notes').value.trim();
+  const parts=[base];
+
+  if(S.intent==='entree'){
+    const lines=entryBaseLines();
+    parts.push('Détail entrées : '+lines.map(l=>`${l.qty}x ${l.label} (${l.formula.nom})`).join(', '));
+    if(S.nbA>0)parts.push(`${S.nbA} adulte(s) accompagnateur(s)`);
+    if(S.entryUpgrade){
+      const opts=entryUpgradeEntries(S.entryUpgrade);
+      parts.push('Upgrade : '+(S.entryUpgrade==='gouter'?'3h + goûter':'3h + repas'));
+      if(opts.length)parts.push('Options appliquées : '+opts.map(x=>x.option.nom).join(', '));
+    }
+  }else{
+    const os=ALL.options.filter(o=>S.opts.includes(o.id));
+    if(os.length)parts.push('Options : '+os.map(o=>o.nom).join(', '));
+  }
+  return parts.filter(Boolean).join(' | ');
+}
+
+async function confirmReservation(){
+  const btn=document.getElementById('next');
+  btn.disabled=true;
+  btn.textContent='Enregistrement…';
+
+  try{
+    const payload={
+      activite_id:S.activity.id,
+      formule_id:primaryFormulaId(),
+      date:S.date,
+      heure_arrivee:S.slot+':00',
+      duree_min:duration(),
+      nb_personnes:S.nb03+S.nb412,
+      nb_adultes:S.nbA,
+      nom_client:document.getElementById('prenom').value.trim()+' '+document.getElementById('nom').value.trim(),
+      email_client:document.getElementById('email').value.trim(),
+      telephone_client:document.getElementById('tel').value.trim(),
+      prenom_enfant:S.intent==='anniversaire'?document.getElementById('cpn').value.trim():null,
+      age_enfant:S.intent==='anniversaire'?Number(document.getElementById('cage').value):null,
+      montant_total:total(),
+      montant_acompte:0,
+      statut:'confirmee',
+      origine:'site_web',
+      notes:reservationNotes()||null
+    };
+
+    await sb('reservations','POST',payload);
+
+    document.getElementById('success-info').innerHTML=`
+      <h2>${S.intent==='anniversaire'?(S.formula?.nom||'Anniversaire'):(S.entryUpgrade?'Entrée 3h + '+S.entryUpgrade:'Entrée 2h')}</h2>
+      <p>${new Date(S.date+'T12:00:00').toLocaleDateString('fr-FR')} à ${S.slot} · ${fmt(total())}</p>`;
+
+    S.step=7;
+    document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));
+    document.getElementById('s7').classList.add('on');
+    document.getElementById('sticky').style.display='none';
+    document.getElementById('progress').style.display='none';
+    scrollTo(0,0);
+  }catch(e){
+    console.error(e);
+    alert("La réservation n'a pas pu être enregistrée. Merci de réessayer.");
+    btn.disabled=false;
+    btn.textContent='Confirmer la réservation ✅';
+  }
+}
+
+init();
+</script>
+</body></html>
